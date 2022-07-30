@@ -19,20 +19,21 @@ class GoodsList {
         this.filter = filter;
         this.sortPrice = sortPrice;
         this.sortDir = sortDir;
-        this.sortedListByFilter
+        this.sortedListByFilter;
+        this.sortedListByAvail;
     }
 
-    getSortedList(filter = NaN, sortPrice = true, sortDir = true) {
-        filter = /^[а-я]{6}$/i
-        this.sordetListByFilter = this.#goods.filter((good) => filter.test(good.name))
-        if (sortPrice) {
-            if (sortDir) {
-                return this.sordetListByFilter.sort((good1, good2) => good1.price - good2.price)
+    getList() {
+        this.sordetListByFilter = this.#goods.filter((good) => this.filter.test(good.name))
+        this.sortedListByAvail = this.sordetListByFilter.filter((good) => good.available === true)
+        if (this.sortPrice) {
+            if (this.sortDir) {
+                return this.sortedListByAvail.sort((good1, good2) => good1.price - good2.price)
             } else {
-                return this.sordetListByFilter.sort((good1, good2) => good2.price - good1.price)
+                return this.sortedListByAvail.sort((good1, good2) => good2.price - good1.price)
             }
         }
-        return this.sordetListByFilter
+        return this.sortedListByAvail
     }
 
     add(newGood) {
@@ -70,7 +71,6 @@ class BasketGood extends Goods {
 
 class Basket {
     goods = []
-    AvailableGoods = []
 
     add(newGood, newAmount) {
         let ifInBasket = false
@@ -89,8 +89,8 @@ class Basket {
     remove(goodForRemove, amountForRemove) {
         this.goods.forEach((good, index) => {
             if (good.id === goodForRemove.id) {
-                if (good.amount < amountForRemove) {
-                    console.log("Введено количество товара больше имеющегося, товар будет полностью удален")
+                if (good.amount <= amountForRemove) {
+                    console.log("Введено количество товара больше или равно имеющегося, товар будет полностью удален")
                     this.goods.splice(index, 1)
                 }
                 good.amount -= amountForRemove
@@ -104,18 +104,20 @@ class Basket {
     }
 
     removeUnavailable() {
-        this.AvailableGoods = this.goods.filter((goodFromBasket) => goodFromBasket.available)
-        return this.AvailableGoods
+        for (let i in this.goods){
+            let oneLineInfo = this.goods[i]
+            console.log("oneLineInfo", oneLineInfo)
+            if (oneLineInfo.available === false){
+                this.goods.splice(i, 1)
+            }
+        }
     }
 
     totalAmount() {
-        console.log("Зашел в функцию")
         let result = 0
 
         for (let i in this.goods) {
-            console.log(i)
             let oneLineInfo = this.goods[i]
-            console.log("oneLineInfo", oneLineInfo)
             result += oneLineInfo.amount
         }
         return result
@@ -125,7 +127,7 @@ class Basket {
         let result = 0
         for (let i in this.goods) {
             let oneLineInfo = this.goods[i]
-            let orderSumm = oneLineInfo.price * oneLineInfo.amount
+            letorderSumm = oneLineInfo.price * oneLineInfo.amount
             result += orderSumm
         }
         return result
@@ -137,14 +139,14 @@ class Basket {
 let good = new Goods(1, "Толстовка", "теплая и мягкая", "S", "1240", true)
 let good2 = new Goods(2, "Толстовка", "теплая и мягкая", "M", "1440", false)
 let good3 = new Goods(3, "Пижама", "теплая и мягкая", "XL", "3440", true)
-let good4 = new Goods(4, "Пижама", "теплая и мягкая", "XL", "34570", true)
+let good4 = new Goods(4, "Пижама", "теплая и мягкая", "XL", "34570", false)
 let good5 = new Goods(5, "Пижама", "теплая и мягкая", "XL", "340", true)
 
-let goodList1 = new GoodsList()
+let goodList1 = new GoodsList(/^[а-я]{6}$/i,true,true)
 goodList1.add(good)
 goodList1.add(good2)
 goodList1.add(good3)
-goodList1.add(good3)
+goodList1.add(good4)
 goodList1.add(good5)
 
 let basket = new Basket()
@@ -169,18 +171,17 @@ basket.add(good5, 2)
 
 // Проверка удаления недоступных товаров
 // basket.removeUnavailable()
-// console.log("Удаление недостпных товаров", basket.AvailableGoods)
+// console.log("Удаление недостпных товаров", basket)
 
 
 // Проверка подсчета количества и суммы товаров в корзине
-console.log("Количество товара в корзине", basket.totalAmount())
-console.log("Сумма товаров в корзине", basket.totalSumm())
+// console.log("Количество товара в корзине", basket.totalAmount())
+// console.log("Сумма товаров в корзине", basket.totalSumm())
 
 
+// Проверка фильтрации
 // console.log(goodList1)
-// goodList1.getSortedList('Пижама')
-// console.log("Результат только с фильтром по имени", goodList1.getSortedList('Пижама'))
-// console.log("Результат фильтра с сортировкой тру", goodList1.getSortedList('Пижама', true, true))
-// console.log("Результат фильтра с сортировкой фалс", goodList1.getSortedList('Пижама', true, false))
+// goodList1.getList('Пижама')
+// console.log("Результат только с фильтром по имени", goodList1.getList('Пижама'))
 // console.log("результат удаления по ид", goodList1.remove(2))
 
