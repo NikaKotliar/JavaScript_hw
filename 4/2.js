@@ -6,7 +6,6 @@ const rl = require('readline').createInterface(process.stdin, process.stdout)
 
 function compareNumbers() {
     rl.question("Введите число ", (userNumber) => {
-        rl.write('\nПользователь ввел число test', userNumber, " test\n");
         if (isNaN(userNumber)) {
             console.log('Введено не число! Введите число');
         } else {
