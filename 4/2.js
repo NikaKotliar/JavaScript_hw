@@ -5,27 +5,21 @@ const { type } = require('os')
 const rl = require('readline').createInterface(process.stdin, process.stdout)
 
 function compareNumbers() {
-    rl.question("Введите число", (UserNumber) => {
-        if (isNaN(UserNumber)) {
+    rl.question("Введите число ", (userNumber) => {
+        rl.write('\nПользователь ввел число test', userNumber, " test\n");
+        if (isNaN(userNumber)) {
             console.log('Введено не число! Введите число');
         } else {
-            console.log('Пользователь ввел число ', UserNumber);
-            if (UserNumber === n) {
-                rl.close
+            if (userNumber == n) {
+                console.log("Вы угадали число")
+                rl.close()
                 return
+            } else if (n < userNumber) {
+                console.log("Ваше число больше загаданного")
             } else {
-                if (n < UserNumber) {
-                    console.log("Ваше число больше загаданного")
-                    }else{
-                        
-                    }
-                    
-                }
-
+                console.log("Ваше число меньше загаданного")
             }
         }
-
-
         compareNumbers()
     })
 }
