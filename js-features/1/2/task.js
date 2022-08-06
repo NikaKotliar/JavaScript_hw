@@ -1,27 +1,38 @@
 let clickerCounter = document.getElementById("clicker__counter")
 
 let cookieImg = document.getElementById("cookie")
-// const currenWidth = cookieImg.width
-// const currentHeight = cookieImg.height
-// const wideWidth = cookieImg.width *2
-// const wideHeight = cookieImg.height *2
 
 
 
 
 
+let isExtended = false
+function usingOuterBool() {
+    clickerCounter.textContent++
+    if (isExtended) {
+        cookieImg.width /= 2
+        cookieImg.height /= 2
+    } else {
+        cookieImg.width *= 2
+        cookieImg.height *= 2
+    }
+    isExtended = !isExtended
+}
 
 
-function imageZoom() {
+
+function zoomIn() {
     clickerCounter.textContent++
     cookieImg.width *= 2
     cookieImg.height *= 2
-    
-    // cookieImg.onclick = () => {
-    //     cookieImg.width = cookieImg.width / 2
-    //     cookieImg.height = cookieImg.height / 2
-    //     imageZoom()
-    // }
+    cookieImg.onclick = zoomOut
 }
 
-cookieImg.onclick = imageZoom
+function zoomOut() {
+    clickerCounter.textContent++
+    cookieImg.width /= 2
+    cookieImg.height /= 2
+    cookieImg.onclick = zoomIn
+}
+
+cookieImg.onclick = zoomIn

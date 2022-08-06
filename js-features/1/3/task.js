@@ -21,3 +21,37 @@
     next();
 })();
 
+let deadMoleCounter = document.getElementById("dead")
+let missedMoleCounter = document.getElementById("lost")
+
+function resetGame() {
+    deadMoleCounter.textContent = 0
+    missedMoleCounter.textContent = 0
+}
+
+function checkGameStatus() {
+    if (deadMoleCounter.textContent >= 10) {
+        alert("Вы победили!")
+        resetGame()
+    } else if (missedMoleCounter.textContent >= 5) {
+        alert("Вы проиграли")
+        resetGame()
+    }
+}
+
+function prepareField() {
+   let holes = document.getElementsByClassName("hole")
+   for (var i = 0; i < holes.length; ++i) {
+       let currentHole = holes[i]
+       currentHole.onclick = () => {
+           if (currentHole.className.includes("hole_has-mole")) {
+               deadMoleCounter.textContent++
+           } else {
+               missedMoleCounter.textContent++
+           }
+           checkGameStatus()
+       }
+   }
+}
+
+prepareField()
