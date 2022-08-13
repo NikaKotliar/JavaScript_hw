@@ -3,9 +3,6 @@ let clickerCounter = document.getElementById("clicker__counter")
 let cookieImg = document.getElementById("cookie")
 
 
-
-
-
 let isExtended = false
 function usingOuterBool() {
     clickerCounter.textContent++
