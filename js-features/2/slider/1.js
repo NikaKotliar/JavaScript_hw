@@ -1,33 +1,26 @@
-let sliders = document.querySelectorAll(".slider__item")
-let current = 0
+let sliders = Array.from(document.querySelectorAll(".slider__item"))
 
-
-moveSlide = () => {
-    for (let i = 0; i < sliders.length; i++) {
-        sliders[i].classList.remove('slider__item_active')
+moveSlide = (diff) => {
+    let currentIndex = sliders.findIndex(
+        (it) => it.classList.contains("slider__item_active")
+    )
+    if (currentIndex == -1) {
+        currentIndex = 0;
     }
-    sliders[current].classList.add('slider__item_active')
-
+    currentIndex = (sliders.length + currentIndex + diff) % sliders.length
+    sliders.forEach((el) => el.classList.remove('slider__item_active'))
+    if (sliders.length > currentIndex) {
+        sliders[currentIndex].classList.add('slider__item_active')
+    }
 }
 
-moveSlide()
-
 document.querySelector(".slider__arrow_prev").onclick = () => {
-    if (current - 1 == -1) {
-        current = sliders.length -1
-    } else {
-        current -= 1
-    }
-    moveSlide()
-
+    moveSlide(-1)
 }
 
 document.querySelector(".slider__arrow_next").onclick = () => {
-    
-    if (current + 1 == sliders.length) {
-        current = 0
-    } else {
-        current += 1
-    }
-    moveSlide()
+    moveSlide(1)
 }
+
+
+moveSlide(0)
