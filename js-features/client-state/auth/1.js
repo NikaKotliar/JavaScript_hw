@@ -2,17 +2,15 @@
 // необходимо направить AJAX-запрос с содержимым формы 
 //по адресу https://netology-slow-rest.herokuapp.com/auth.php
 
-
 const url = 'https://netology-slow-rest.herokuapp.com/auth.php'
 const form = document.forms[0]
-
 
 function sendData(login, password) {
 
     let formData = new FormData();
-    formData.append('login', 'login');
-    formData.append('password', 'password');
-    console.log(formData , login, password)
+    formData.append('login', login);
+    formData.append('password', password);
+    console.log(formData)
 
     let fetchData = {
         method: 'POST',
@@ -20,13 +18,10 @@ function sendData(login, password) {
     }
 
     fetch(url, fetchData)
-        .then(function(response){
-            response.json()
-            console.log(response)
-            console.log(response.json())
-
-        })
+        .then((response) => response.json()
+        )
         .then(function (data) {
+            IsOk(data.success, data.user_id)
             console.log(data)
         })
         .catch(function (error) {
@@ -34,7 +29,6 @@ function sendData(login, password) {
         })
 
 }
-
 
 //Получить данные с формы
 function getInfoFromForm() {
@@ -45,14 +39,14 @@ function getInfoFromForm() {
 }
 
 //Авторизовать пользователя или показать ошибку
-function IsOk(ok) {
-    if (ok) {
-        onSuccessAuth()
+function IsOk(ok, userName) {
+    if (ok == true) {
+        onSuccessAuth(userName)
+        saveUser(userName)
     } else {
         alert('Неверные логин/пароль')
     }
 }
-
 
 // Перерисовать экран входа
 function onSuccessAuth(userName) {
@@ -64,22 +58,31 @@ function onSuccessAuth(userName) {
 }
 
 //сохранить инфо о залогиненом пользователя
-
-
-//проверка есть ли пользователь и показ экрана входа
+function saveUser(iserId) {
+    localStorage.setItem('user_id', iserId)
+    console.log('Пользователь ', iserId, 'сохранен')
+}
 
 //инициация отправки формы
-function onSubmit(){
-    form.addEventListener('submit', (e)=>{
+function onSubmit() {
+    form.addEventListener('submit', (e) => {
         e.preventDefault()
         let datas = getInfoFromForm()
         login = datas[0]
         password = datas[1]
         console.log(login, password)
 
-        sendData(login,password)
+        sendData(login, password)
 
     })
 }
 
-onSubmit()
+function onLoad() {
+    if (localStorage.getItem('user_id') != null) {
+        onSuccessAuth(localStorage.getItem('user_id'))
+    } else {
+        onSubmit()
+    }
+}
+
+onLoad()
