@@ -10,8 +10,9 @@ const form = document.forms[0]
 function sendData(login, password) {
 
     let formData = new FormData();
-    formData.append('login', login);
-    formData.append('password', password);
+    formData.append('login', 'login');
+    formData.append('password', 'password');
+    console.log(formData , login, password)
 
     let fetchData = {
         method: 'POST',
@@ -19,8 +20,11 @@ function sendData(login, password) {
     }
 
     fetch(url, fetchData)
-        .then((response) =>{
+        .then(function(response){
             response.json()
+            console.log(response)
+            console.log(response.json())
+
         })
         .then(function (data) {
             console.log(data)
@@ -71,6 +75,7 @@ function onSubmit(){
         let datas = getInfoFromForm()
         login = datas[0]
         password = datas[1]
+        console.log(login, password)
 
         sendData(login,password)
 
